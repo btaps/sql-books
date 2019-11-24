@@ -81,12 +81,14 @@ app.put('/api/books/:id', (req,res) => {
   
   // identify what we are going to update
   const bookId = req.params.id;
+  // use book body in variable
+  const bookBodyTitle = [req.body.title]
   // create Query string
   const updateOneBook = `UPDATE books SET TITLE = ? WHERE books.oid = ${bookId}`
 
   // use Query string and req.body to run a the query on the database
   // ******* YOU NEED AN ARRAY WHEN YOU PROVIDE QUESTION MARK *******
-  database.run(updateOneBook, [req.body.title], err=>{
+  database.run(updateOneBook, bookBody, err=>{
     if(err){
       res.sendStatus(400);
       console.log(`Update book with id: ${bookId} failed.`, err);
@@ -100,10 +102,10 @@ app.put('/api/books/:id', (req,res) => {
 // delete book
 app.delete('/api/books/:id',  (req, res) => {
   // get book id from url params (`req.params`)
-  const bookId = req.params.id
+  const bookId = [req.params.id]
   const deleteThisBookString = `DELETE FROM books WHERE ? = oid`
 
-  database.run(deleteThisBookString, [bookId], err=>{
+  database.run(deleteThisBookString, bookId, err=>{
     if(err){
       console.log(`Delete book with id of ${bookId} failed.`)
       res.sendStatus(500)
@@ -135,6 +137,8 @@ app.get('/api/authors',  (req, res) => {
     }
   })
 });
+
+
 // 2. Write a route to add a new author to the database
 app.post('/api/authors',  (req, res) => {
   // create new book with form data (`req.body`)
@@ -166,6 +170,39 @@ app.delete('/api/authors/:id',  (req, res) => {
     }
   })
 
+});
+
+
+
+app.get('/api/authors/:id',  (req, res) => {
+  // find one author by its id
+  // get params id 
+  const getAuthorsId = [req.params.id]
+  // set query string 
+  const getAuthorIdStringQuery = `SELECT * FROM authors WHERE authors.oid = ?`
+
+  // run the db.all
+  database.all(getAuthorIdStringQuery, getAuthorsId,(err, results)=>{
+    if(err){
+      console.log("Get one author failed.")
+      res.sendStatus(500)
+    }else {
+      res.status(200).json(results)
+    }
+  })
+});
+app.put('/api/authors/:id', (req,res)=>{
+  const queryInsertion = [req.body.name, req.params.id];
+  const queryString = `UPDATE authors SET name = ? WHERE authors.oid = ?`
+  database.run(queryString, queryInsertion, (err, results)=>{
+    if(err){
+      console.log(`Can't update author`)
+      res.sendStatus(500)
+    } else {
+      res.sendStatus(200)
+      console.log(`successfully update author with id of ${queryInsertion[1]}`)
+    }
+  })
 });
 
 //////////////////////////
@@ -209,7 +246,7 @@ app.delete('/api/categories/:id', (req, res)=>{
   const categoryId = [req.params.id]
   const deleteQueryString = 'DELETE FROM categories WHERE categories.oid = ?'
 
-  database.run(deleteQueryString, categoryIdç, err=>{
+  database.run(deleteQueryString, categoryId, err=>{
     if(err) {
       console.log(`Failed deleted book with id of ${categoryId}`)
       res.sendStatus(500)
@@ -220,6 +257,33 @@ app.delete('/api/categories/:id', (req, res)=>{
   })
 })
 
+app.get('/api/categories/:id',  (req, res) => {
+
+  const getCatagoryId = [req.params.id]
+  const getCatagoryIdStringQuery = `SELECT * FROM categories WHERE categories.oid = ?`
+
+  database.all(getCatagoryIdStringQuery, getCatagoryId,(err, results)=>{
+    if(err){
+      console.log("Get one catagory failed.")
+      res.sendStatus(500)
+    }else {
+      res.status(200).json(results)
+    }
+  })
+});
+app.put('/api/categories/:id', (req,res)=>{
+  const queryInsertion = [req.body.name, req.params.id];
+  const queryString = `UPDATE categories SET name = ? WHERE categories.oid = ?`
+  database.run(queryString, queryInsertion, (err, results)=>{
+    if(err){
+      console.log(`Can't update cat2gory`)
+      res.sendStatus(500)
+    } else {
+      res.sendStatus(200)
+      console.log(`successfully update category with id of ${queryInsertion[1]}`)
+    }
+  })
+});
 /////////////////////////////////////////////////
 // TODO: BOOKS_CATEGORIES ROUTES (MANY TO MANY)
 /////////////////////////////////////////////////
@@ -237,15 +301,26 @@ app.get('/api/books/:id/categories', (req, res)=>{
     }else res.status(200).json(results);
   })
 })
+//get all books_categories
+app.get('/api/books_categories', (req, res)=>{
+  const queryString = `SELECT * FROM books_categories`
 
+  database.all(queryString, (err, results)=>{
+    if(err){
+      console.log(`Couldn't get books_categories table.`)
+      res.sendStatus(500)
+    } else {
+      res.status(200).json(results)
+    }
+  })
+})
 
 // Create an association between a book and a category using the book ID
 app.post('/api/books/:id/categories', (req, res)=>{
-  const bookId = req.params.id;
-  const catId = req.body.category_id;
+  const insertArr = [req.params.id, req.body.category_id];
   const insertString = "INSERT INTO books_categories VALUES (?, ?)"
 
-  database.run(insertString, [bookId, catId], (err)=>{
+  database.run(insertString, insertArr, (err)=>{
     if(err) {
       console.log(err);
       res.sendStatus(500);
@@ -253,6 +328,15 @@ app.post('/api/books/:id/categories', (req, res)=>{
   });
 })
 
+app.delete('/api/books_categories/:bookID', (req,res)=>{
+  const queryInsertion = [req.params.bookID]
+  const queryString = 'DELETE FROM books_categories WHERE book_id = ?'
+
+  database.run(queryString, queryInsertion, err=>{
+    if(err) res.sendStatus(500)
+    else  res.sendStatus(200)
+  })
+})
 // Start Server
 app.listen(port, () => {
   console.log(`App listening on port ${port}`);
