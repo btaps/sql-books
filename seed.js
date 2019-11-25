@@ -34,63 +34,63 @@ const books_list = [
     author_id: 2,
     image: "https://s3-us-west-2.amazonaws.com/sandboxapi/great_gatsby.jpg",
     release_date: "April 10, 1925",
-    page_count: 1000
+    page_count: 400
   },
   {
     title: "Les Miserables",
     author_id: 3,
     image: "https://s3-us-west-2.amazonaws.com/sandboxapi/les_miserables.jpg",
     release_date: "Unknown 1862",
-    page_count: 1000
+    page_count: 500
   },
   {
     title: "Around the World in 80 Days",
     author_id: 4,
     image: "https://s3-us-west-2.amazonaws.com/sandboxapi/around_the_world_in_80_days.jpg",
     release_date: "January 30, 1873",
-    page_count: 1000
+    page_count: 300
   },
   {
     title: "Lean In",
     author_id: 5,
     image: "https://s3-us-west-2.amazonaws.com/sandboxapi/lean_in.jpg",
     release_date: "March 11, 2013",
-    page_count: 1000
+    page_count: 3200
   },
   {
     title: "The Four Hour Workweek",
     author_id: 6,
     image: "https://s3-us-west-2.amazonaws.com/sandboxapi/four_hour_work_week.jpg",
     release_date: "April 1, 2007",
-    page_count: 1000
+    page_count: 2000
   },
   {
     title: "Of Mice and Men",
     author_id: 7,
     image: "https://s3-us-west-2.amazonaws.com/sandboxapi/of_mice_and_men.jpg",
     release_date: "Unknown 1937",
-    page_count: 1000
+    page_count: 3200
   },
   {
     title: "Romeo and Juliet",
     author_id: 8,
     image: "https://s3-us-west-2.amazonaws.com/sandboxapi/romeo_and_juliet.jpg",
     release_date: "Unknown 1597",
-    page_count: 1000
+    page_count: 500
   },
   {
     title: "Twelfth Night",
     author_id: 8,
     image: "sampleImage.jpg",
     release_date: "Unknown 1597",
-    page_count: 1000
+    page_count: 800
   },
   {
     title: "Midsummer's Night Dream",
     author_id: 8,
     image: "sampleImage.jpg",
     release_date: "Unknown 1597",
-    page_count: 1000
+    page_count: 600
   },
   {
     title: "Macbeth", 

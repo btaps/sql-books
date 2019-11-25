@@ -88,7 +88,7 @@ app.put('/api/books/:id', (req,res) => {
 
   // use Query string and req.body to run a the query on the database
   // ******* YOU NEED AN ARRAY WHEN YOU PROVIDE QUESTION MARK *******
-  database.run(updateOneBook, bookBody, err=>{
+  database.run(updateOneBook, bookBodyTitle, err=>{
     if(err){
       res.sendStatus(400);
       console.log(`Update book with id: ${bookId} failed.`, err);
